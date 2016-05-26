@@ -243,7 +243,7 @@ void MainWindow::writeTCPData()
 
 }
 
-void MainWindow::pinWrite(bool level)
+void MainWindow::pinToggle()
 {
 
 }
