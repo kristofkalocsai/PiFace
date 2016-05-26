@@ -4,6 +4,7 @@
 #include <QTcpSocket>
 #include <QByteArray>
 #include <QCloseEvent>
+#include <QTimer>
 
 #include <QTextStream>
 
@@ -44,31 +45,32 @@ void MainWindow::connectTCP()
 void MainWindow::sendGetAll(){
     qDebug() << "sending Y";
     socket->write("Y\n");
-    socket->flush();
+}
+
+void MainWindow::timerSetup(int ms){
+    mTimer = new QTimer(this);
+    mTimer->setTimerType(Qt::PreciseTimer);
+    connect(mTimer,SIGNAL(timeout()), this, SLOT(&MainWindow::timerCallback()));
+    qDebug() << "starting timer";
+    mTimer->start(ms);
+}
+
+void MainWindow::timerCallback(){
+    qDebug() << "timer callback";
+    socket->write("Y\n");
     socket->waitForBytesWritten();
 }
 
-void MainWindow::readAllPins()
-{
-//    socket->write("Y\n");
-//    socket->waitForReadyRead();
-    qDebug() << socket->bytesAvailable() << "available in readAllPins()";
+void MainWindow::readAllPins(){
+
+//    qDebug() << socket->bytesAvailable() << "available in readAllPins()";
     if(socket->bytesAvailable() < 64)
         return;
 
     char bytesRemaining = 64;
     char bytes_pre,bytes_post;
 
-
-
     while(bytesRemaining > 0){
-//        if (!socket->waitForReadyRead()){
-//            qDebug() << "waitForReadyRead() timed out";
-//            return;
-//        }
-
-
-
         bytes_pre = pins.size();
         pins.append(socket->read(bytesRemaining));
         bytes_post = pins.size();
@@ -76,9 +78,8 @@ void MainWindow::readAllPins()
         bytesRemaining -= (bytes_post-bytes_pre);
 //        qDebug() << QByteArray::number(bytesRemaining) << "remaining";
 //        qDebug() << pins.size() << "pins.size";
-
     }
-    qDebug() << pins.size() << "pins.size";
+//    qDebug() << pins.size() << "pins.size";
 
     for(int i = 0;i<=31;i++){
         gpios[i] = pins[(2*i)+1];
