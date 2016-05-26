@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 //    w.show();
 
     w.connectTCP();
-    w.readAllPins();
+    w.sendGetAll();
 
     w.show();
     return a.exec();

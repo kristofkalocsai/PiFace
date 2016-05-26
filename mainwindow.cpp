@@ -36,32 +36,49 @@ void MainWindow::connectTCP()
 //    if(socket->waitForConnected()){
 //       socket->write(data);
 //    }
+    connect(socket,&QIODevice::readyRead, this,&MainWindow::readAllPins);
+//    connect(socket,&QIODevice::bytesWritten,this, &MainWindow::)
 
+}
+
+void MainWindow::sendGetAll(){
+    qDebug() << "sending Y";
+    socket->write("Y\n");
+    socket->flush();
+    socket->waitForBytesWritten();
 }
 
 void MainWindow::readAllPins()
 {
-    socket->write("Y\n");
-    socket->waitForReadyRead();
+//    socket->write("Y\n");
+//    socket->waitForReadyRead();
+    qDebug() << socket->bytesAvailable() << "available in readAllPins()";
+    if(socket->bytesAvailable() < 64)
+        return;
+
     char bytesRemaining = 64;
     char bytes_pre,bytes_post;
 
+
+
     while(bytesRemaining > 0){
-        if (!socket->waitForReadyRead()){
-            qDebug() << "waitForReadyRead() timed out";
-            return;
-        }
+//        if (!socket->waitForReadyRead()){
+//            qDebug() << "waitForReadyRead() timed out";
+//            return;
+//        }
+
+
 
         bytes_pre = pins.size();
         pins.append(socket->read(bytesRemaining));
         bytes_post = pins.size();
 
         bytesRemaining -= (bytes_post-bytes_pre);
-        qDebug() << QByteArray::number(bytesRemaining) << "remaining";
-        qDebug() << pins.size() << "pins.size";
+//        qDebug() << QByteArray::number(bytesRemaining) << "remaining";
+//        qDebug() << pins.size() << "pins.size";
 
     }
-    qDebug() << pins.size();
+    qDebug() << pins.size() << "pins.size";
 
     for(int i = 0;i<=31;i++){
         gpios[i] = pins[(2*i)+1];
@@ -243,20 +260,24 @@ void MainWindow::writeTCPData()
 
 }
 
-void MainWindow::pinWrite(bool level)
+void MainWindow::pinToggle(int pin)
 {
-
+    QByteArray msg;
+    msg.append("B");
+    msg.append(pin+0x30);
+    if(gpios[pin]) msg.append("0\n");
+    if(!gpios[pin]) msg.append("1\n");
+    socket->write(msg);
 }
 
 void MainWindow::on_pushButton_clicked()
 {
-    readAllPins();
+    sendGetAll();
 }
 
 void MainWindow::on_pin_37_clicked()
 {
-    qDebug() << QByteArray::number(gpios[25]) << "pin25";
-    if(gpios[25]) socket->write("BI0\n");
-    if(!gpios[25]) socket->write("BI1\n");
-    readAllPins();
+    pinToggle(25);
+    qDebug() << "sendGetAll from pin37 clicked";
+    sendGetAll();
 }

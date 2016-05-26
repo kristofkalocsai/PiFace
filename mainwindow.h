@@ -19,6 +19,7 @@ public:
     void connectTCP();
     void readTCPData();
     void writeTCPData();
+    void sendGetAll();
     void readAllPins();
     void pinToggle(int pin);
     void closeEvent(QCloseEvent *event);
@@ -36,6 +37,7 @@ private:
     QByteArray pins;
     char gpios[31];
     QTextStream out();
+    bool state; //true if sending, false if receivin
 
 };
 
