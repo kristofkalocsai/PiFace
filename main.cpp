@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
 //    w.show();
 
     w.connectTCP();
-//    w.sendGetAll();
-    w.timerSetup(100);
+    w.sendGetAll();
+//    w.timerSetup(100);
 
     w.show();
     return a.exec();
