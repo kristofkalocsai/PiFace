@@ -34,11 +34,7 @@ void MainWindow::connectTCP()
 
     socket = new QTcpSocket(this);
     socket->connectToHost("pizero.local",3344);
-//    if(socket->waitForConnected()){
-//       socket->write(data);
-//    }
     connect(socket,&QIODevice::readyRead, this,&MainWindow::readAllPins);
-//    connect(socket,&QIODevice::bytesWritten,this, &MainWindow::)
 
 }
 
@@ -63,7 +59,6 @@ void MainWindow::timerCallback(){
 
 void MainWindow::readAllPins(){
 
-//    qDebug() << socket->bytesAvailable() << "available in readAllPins()";
     if(socket->bytesAvailable() < 64)
         return;
 
@@ -76,11 +71,7 @@ void MainWindow::readAllPins(){
         bytes_post = pins.size();
 
         bytesRemaining -= (bytes_post-bytes_pre);
-//        qDebug() << QByteArray::number(bytesRemaining) << "remaining";
-//        qDebug() << pins.size() << "pins.size";
     }
-//    qDebug() << pins.size() << "pins.size";
-
     for(int i = 0;i<=31;i++){
         gpios[i] = pins[(2*i)+1];
         gpio_modes[i] = pins[2*i];

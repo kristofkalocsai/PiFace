@@ -10,7 +10,7 @@ Az alkalmazás nagyon korai állapotban van, a készítő semmilyen felelősség
 A kezelőfelület indítása előtt bizonyosodjunk meg róla, hogy a Raspberry Pi-n fut a [szerver alkalmazás](https://github.com/kristofkalocsai/PiFaceServer). Ha ez eddig nem történt meg, tegyük a következőket:
 + hozzunk létre helyi [hálózati kapcsolatot](https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md) a Pi és a számítógép (amelyen a grafikus klienst futtatnánk, lehet maga a Pi is, ekkor a kapcsolatot nem kell létrehozni) között.
 + [tárcsázzunk be](https://www.raspberrypi.org/documentation/remote-access/ssh/) a Pi-re.
-+ indítsuk el a szerveroldali alkalmazást a Pi-n (ne felejtsük rendszergazdai jogokkal indítani, mindenképpen figyelmeztet a program is)
++ indítsuk el a szerveroldali alkalmazást a Pi-n (ne felejtsük rendszergazdai jogokkal indítani, erre mindenképpen figyelmeztet a program is)
 + ekkor a következő üzenetet kapjuk:
 ```shell
 $ sudo ./piproj

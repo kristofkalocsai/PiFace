@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
 
     w.connectTCP();
     w.sendGetAll();
-//    w.timerSetup(100);
 
     w.show();
     return a.exec();
